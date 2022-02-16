@@ -30,6 +30,16 @@ public abstract class ProjectComponent {
     public float hourlyRate;
 
     /**
+     * Array of components of a Project
+     * ⚠️ Only available inside Projects
+     */
+    public ProjectComponent[] components = {};
+
+    public ProjectComponent[] addComponent(ProjectComponent component) {
+        throw new NotImplementedException("method not implemented");
+    };
+
+    /**
      * Set the name of the Component
      * 
      * @param name String containing the new name of the Component

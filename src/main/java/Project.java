@@ -1,5 +1,6 @@
+import java.util.Arrays;
+
 public class Project extends ProjectComponent {
-    private ProjectComponent[] components;
 
     @Override
     public void setHourlyRate(float hourlyRate) {
@@ -9,6 +10,20 @@ public class Project extends ProjectComponent {
     @Override
     public float getHourlyRate() {
         return this.hourlyRate;
+    }
+
+    @Override
+    public ProjectComponent[] addComponent(ProjectComponent component) {
+        this.components = Arrays.copyOf(this.components, this.components.length + 1);
+        this.components[this.components.length - 1] = component;
+
+        return this.components;
+    }
+
+    public Project(String name, String description, float hourRate) {
+        this.setName(name);
+        this.setDescription(description);
+        this.setHourlyRate(hourRate);
     }
 
     /**
