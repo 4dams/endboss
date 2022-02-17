@@ -1,0 +1,24 @@
++ PROJ; Spiel; Wir programmieren ein Spiel; 100;
++ AUF; Recherche; Zuerst wird recherchiert; 20; Spiel
++ PROJ; Game-Design; Game-Design entwickeln; 80; Spiel
++ PROD; Game-Design-Dokument; GDD schreiben; 2000; Game-Design
++ AUF; Charaktere; Die Charaktere werden geplant; 30; Game-Design
++ AUF; Skizzen; Zeichnen erster Skizzen; 40; Game-Design
++ PROJ; Grafik; Entwerfen der Grafik; 90; Spiel
++ AUF; 3D-Modellierung; 3D-Modelle entwerfen; 150; Grafik
++ AUF; 2D-Modellierung; 2D-Modelle entwerfen; 80; Grafik
++ PROD; 3D-Modelle; ; 10000; Grafik
++ PROD; 2D-Modelle; ; 5000; Grafik
+- 3D-Modellierung
+- 3D-Modelle
++ PROJ; Server; Server vorbereiten; 130; Entwicklung
++ AUF; ServerPlanen; ; 40; Server
++ AUF; ServerEinrichten; ; 80; Server
++ AUF; Zeichen; ; 90; Grafik
++ PROJ; Entwicklung; Entwicklung des Spiels; 500; Spiel
++ AUF; Architektur; Architektur entwerfen; 25; Entwicklung
++ AUF; Programmierung; Programmcode schreiben; 300; Entwicklung
++ PROD; Programmcode; ; 10000; Entwicklung
+- ServerPlanen
+- ServerEinrichten
+- Server

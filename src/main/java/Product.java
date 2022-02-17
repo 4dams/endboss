@@ -13,4 +13,10 @@ public class Product extends ProjectComponent {
         return this.productionCost;
     }
 
+public Product(String name, String description, float productionCost) {  
+        this.setName(name);
+        this.setDescription(description);
+        this.setProductionCost(productionCost);    
+}
+
 }
