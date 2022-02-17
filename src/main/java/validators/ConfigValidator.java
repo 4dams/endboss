@@ -13,7 +13,7 @@ public class ConfigValidator {
     }
 
     public static boolean isValidLine(String line) {
-        System.out.println(String.format("DEBUG | %s", line));
+        System.out.println(String.format("DEBUG  | %s", line));
 
         String trimmed = line.trim();
         String[] parts = trimmed.split("; ");
@@ -38,12 +38,12 @@ public class ConfigValidator {
 
         // Check if the line starts with a `+` or a `-`
         if (!trimmed.startsWith("+") && !trimmed.startsWith("-")) {
-            System.out.println("ERROR | Each line must either start with a `+` or a `-`");
+            System.out.println("ERROR  | Each line must either start with a `+` or a `-`");
             return false;
         }
 
         if (addOrRemove.equals("+") && (!type.equals("PROJ") && !type.equals("AUF") && !type.equals("PROD"))) {
-            System.out.println("ERROR | The second parameter must be one of [\"PROJ\", \"AUF\", \"PROD\"]");
+            System.out.println("ERROR  | The second parameter must be one of [\"PROJ\", \"AUF\", \"PROD\"]");
             return false;
         }
 

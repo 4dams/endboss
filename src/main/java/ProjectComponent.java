@@ -57,8 +57,8 @@ public abstract class ProjectComponent {
      * @param description String containing the description of the Component
      */
     public void setDescription(String description) {
-        if (description.trim().isEmpty())
-            throw new IllegalArgumentException("`description` must not be empty");
+        // if (description.trim().isEmpty())
+        // throw new IllegalArgumentException("`description` must not be empty");
 
         this.description = description;
     };

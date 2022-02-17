@@ -24,7 +24,7 @@ public class ProjectManager {
 
         // Iterate through provided config files
         for (String fileName : args) {
-            System.out.println(String.format("INFO | %s", fileName));
+            System.out.println(String.format("INFO   | %s", fileName));
 
             // Create new ProjectManager instance for each file
             ProjectManager projectManager = new ProjectManager(fileName);
@@ -32,8 +32,8 @@ public class ProjectManager {
     }
 
     public ProjectManager(String fileName) {
-        System.out.println("INFO | Initializing new ProjectManager");
-        System.out.println(String.format("INFO | Provided fileName: `%s`", fileName));
+        System.out.println("INFO   | Initializing new ProjectManager");
+        System.out.println(String.format("INFO   | Provided fileName: `%s`", fileName));
 
         // Create new File object
         file = new File(fileName);
@@ -42,15 +42,15 @@ public class ProjectManager {
         // Check if a file with the provided fileName exists
         if (!file.exists() || !file.canRead() || !file.isFile())
             throw new IllegalArgumentException(
-                    String.format("ERROR | Provided path `%s` is not readable or does not exists",
+                    String.format("ERROR  | Provided path `%s` is not readable or does not exists",
                             path));
 
         // Check if the file is a directory
         if (file.isDirectory())
             throw new IllegalArgumentException(
-                    String.format("ERROR | Provided path `%s` is a directory", path));
+                    String.format("ERROR  | Provided path `%s` is a directory", path));
 
-        System.out.println(String.format("INFO | Reading contents of file `%s`", path));
+        System.out.println(String.format("INFO   | Reading contents of file `%s`", path));
 
         // Read file contents
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
@@ -65,71 +65,16 @@ public class ProjectManager {
 
             // Check if the config is valid
             if (ConfigValidator.isValid(lines.toArray(new String[lines.size()]))) {
-                System.out.println(String.format("INFO | Config `%s` is valid", path));
+                System.out.println(String.format("INFO   | Config `%s` is valid", path));
             } else {
-                System.out.println(String.format("INFO | Config `%s` is invalid", path));
+                System.out.println(String.format("INFO   | Config `%s` is invalid", path));
 
                 // Throw exception
                 throw new IllegalArgumentException(
-                        String.format("ERROR | Config `%s` is invalid, please verify its contents", path));
+                        String.format("ERROR  | Config `%s` is invalid, please verify its contents", path));
             }
 
             this.createComponents(lines.toArray(new String[lines.size()]));
-
-            // // Iterate through lines and create components
-            // for (String config : lines.toArray(new String[lines.size()])) {
-            // String trimmed = config.trim();
-            // String[] parts = trimmed.split("; ");
-            // String type = parts[0].replace("+ ", "");
-
-            // if (trimmed.startsWith("+")) {
-            // switch (type) {
-            // case "PROJ":
-            // System.out.println(String.format("INFO | Creating new Project `%s`",
-            // parts[1]));
-
-            // Project project = new Project(parts[1], parts[2],
-            // Float.parseFloat(parts[3].replace(";", "")));
-
-            // try {
-
-            // String parent = parts[4];
-
-            // // TODO: Add project to parent preject, find parent project, check if parent
-            // // project exists
-
-            // Project parentProject = this
-            // .findProject(this.projects.toArray(new Project[this.projects.size()]),
-            // parent);
-
-            // System.out.println(parentProject);
-
-            // } catch (ArrayIndexOutOfBoundsException exception) {
-            // System.out.println("DEBUG | Project has no parent project");
-
-            // this.projects.add(project);
-            // }
-
-            // break;
-
-            // case "AUF":
-            // System.out.println(String.format("INFO | Creating new Task `%s`", parts[1]));
-            // break;
-
-            // case "PROD":
-            // System.out.println(String.format("INFO | Creating new Product `%s`",
-            // parts[1]));
-            // break;
-            // }
-            // } else {
-            // String target = parts[0].replace("- ", "");
-
-            // System.out.println(String.format("INFO | Deleting Project component `%s`",
-            // target));
-            // // TODO: find component with given name
-            // }
-            // }
-
         } catch (IOException exception) {
             System.out.println("FATAL | Cannot recover from `IOException`");
             System.out.print(exception.getMessage());
@@ -138,71 +83,151 @@ public class ProjectManager {
 
     public void createComponents(String[] lines) {
         // Create all required components
-        Project[] rawComponents = {};
+        ProjectComponent[] tempComponents = {};
 
         for (String config : lines) {
             String trimmed = config.trim();
             String[] parts = trimmed.split("; ");
             String type = parts[0].replace("+ ", "");
 
-            // TODO: Handle removals
+            // Handle additions
             if (trimmed.startsWith("+")) {
+                // Create a new component
+                ProjectComponent component = null;
+
+                // Create different types of components
                 switch (type) {
                     case "PROJ":
-                        Project project = new Project(parts[1], parts[2],
+                        component = new Project(parts[1], parts[2],
                                 Float.parseFloat(parts[3].replace(";", "")));
+                        break;
 
-                        rawComponents = Arrays.copyOf(rawComponents, rawComponents.length + 1);
-                        rawComponents[rawComponents.length - 1] = project;
+                    case "AUF":
+                        component = new Task(parts[1], parts[2],
+                                Integer.parseInt(parts[3].replace(";", "")));
+                        break;
 
+                    case "PROD":
+                        component = new Product(parts[1], parts[2],
+                                Float.parseFloat(parts[3].replace(";", "")));
                         break;
                 }
+
+                // Add the component to the temporary components list
+                tempComponents = Arrays.copyOf(tempComponents, tempComponents.length + 1);
+                tempComponents[tempComponents.length - 1] = (ProjectComponent) component;
             }
         }
 
         // Link components
         for (String config : lines) {
+            // Split the command into parts
             String trimmed = config.trim();
             String[] parts = trimmed.split("; ");
-            String type = parts[0].replace("+ ", "");
 
             if (trimmed.startsWith("+")) {
-                switch (type) {
-                    case "PROJ":
-                        ProjectComponent target = this.findProject(rawComponents, parts[1]);
+                ProjectComponent target = this.findComponent(tempComponents, parts[1]);
 
-                        try {
-                            String parentName = parts[4];
-                            Project parent = this
-                                    .findProject(rawComponents, parentName);
+                try {
+                    // Find the parent component the target shall be linked to
+                    String parentName = parts[4];
+                    ProjectComponent parent = this
+                            .findComponent(tempComponents, parentName);
 
-                            parent.components[parent.components.length] = target;
+                    // Link the target to the parent component
+                    parent.components = Arrays.copyOf(parent.components, parent.components.length + 1);
+                    parent.components[parent.components.length - 1] = target;
 
-                        } catch (ArrayIndexOutOfBoundsException exception) {
-                            this.projects.add(target);
-                        }
+                } catch (ArrayIndexOutOfBoundsException exception) {
+                    this.projects.add(target);
                 }
+            }
+        }
+
+        // Delete items
+        for (String config : lines) {
+            String trimmed = config.trim();
+            String[] parts = trimmed.split("; ");
+            String name = parts[0].replace("- ", "");
+
+            if (trimmed.startsWith("-")) {
+                ProjectComponent parent = this
+                        .findComponentParent(this.projects.toArray(new ProjectComponent[this.projects.size()]), name);
+
+                // Abort if no parent was found
+                if (parent == null) {
+                    System.out.println(String.format("WARN | Could not find any component containing `%s`", name));
+                    return;
+                }
+
+                // Find the index of the item to remove
+                int index = 0;
+                for (int i = index; i < parent.components.length - 1; i++) {
+                    if (parent.components[i] != null && parent.components[i].getName().equals(name)) {
+                        index = i;
+                        break;
+                    }
+                }
+
+                // Remove the component at the previously identified index
+                parent.components[index] = null;
+
+                System.out.println(parent);
             }
         }
 
         System.out.println(this);
+
+        float total = this.projects.get(0).berechneKosten();
+        System.out.println(String.format("INFO   | Total: %s €", total));
     }
 
-    public Project findProject(ProjectComponent[] source, String name) {
-        for (ProjectComponent project : source) {
-            if (project instanceof Project) {
-                // TODO: Debug me and fix this fucking shit i cba anyway
-                if (project.getName().equals(name)) {
-                    return (Project) project;
-                } else {
-                    return this.findProject(project.components, name);
-                }
+    public ProjectComponent findComponent(ProjectComponent[] source, String name) {
+        ProjectComponent target = null;
+
+        for (ProjectComponent component : source) {
+            if (target != null)
+                break;
+
+            if (component.getName().equals(name)) {
+                target = component;
+                return target;
+
             }
+
+            target = this.findComponent(component.components, name);
         }
 
-        System.out.println(String.format("ERROR | Cannot find parent project with name `%s`", name));
+        System.out.println(String.format("ERROR  | Cannot find parent project with name `%s`", name));
 
-        return null;
+        return target;
+    }
+
+    public ProjectComponent findComponentParent(ProjectComponent[] source, String name) {
+        ProjectComponent target = null;
+
+        for (ProjectComponent component : source) {
+            if (target != null)
+                break;
+
+            if (component != null) {
+                // Check if target component is a child of the current component
+                for (ProjectComponent child : component.components) {
+                    if (child != null && child.getName().equals(name)) {
+                        target = component;
+                        return target;
+                    }
+                }
+
+                target = this.findComponentParent(component.components, name);
+            }
+
+        }
+
+        System.out
+                .println(String.format("ERROR  | Could not find any parent containing `%s`", name));
+
+        return target;
     }
 
 }
