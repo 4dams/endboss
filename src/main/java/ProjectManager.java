@@ -24,7 +24,7 @@ public class ProjectManager {
 
         // Iterate through provided config files
         for (String fileName : args) {
-            System.out.println(String.format("INFO   | %s", fileName));
+            System.out.println(String.format("INFO   | looking up config `%s`...", fileName));
 
             // Create new ProjectManager instance for each file
             ProjectManager projectManager = new ProjectManager(fileName);
@@ -32,8 +32,7 @@ public class ProjectManager {
     }
 
     public ProjectManager(String fileName) {
-        System.out.println("INFO   | Initializing new ProjectManager");
-        System.out.println(String.format("INFO   | Provided fileName: `%s`", fileName));
+        System.out.println("INFO   | initializing new project manager");
 
         // Create new File object
         file = new File(fileName);
@@ -42,15 +41,15 @@ public class ProjectManager {
         // Check if a file with the provided fileName exists
         if (!file.exists() || !file.canRead() || !file.isFile())
             throw new IllegalArgumentException(
-                    String.format("ERROR  | Provided path `%s` is not readable or does not exists",
+                    String.format("ERROR  | provided path `%s` is not readable or does not exists",
                             path));
 
         // Check if the file is a directory
         if (file.isDirectory())
             throw new IllegalArgumentException(
-                    String.format("ERROR  | Provided path `%s` is a directory", path));
+                    String.format("ERROR  | provided path `%s` is a directory", path));
 
-        System.out.println(String.format("INFO   | Reading contents of file `%s`", path));
+        System.out.println(String.format("INFO   | reading contents of file `%s`", path));
 
         // Read file contents
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
@@ -65,18 +64,18 @@ public class ProjectManager {
 
             // Check if the config is valid
             if (ConfigValidator.isValid(lines.toArray(new String[lines.size()]))) {
-                System.out.println(String.format("INFO   | Config `%s` is valid", path));
+                System.out.println(String.format("INFO   | config `%s` is valid", path));
             } else {
-                System.out.println(String.format("INFO   | Config `%s` is invalid", path));
+                System.out.println(String.format("INFO   | config `%s` is invalid", path));
 
                 // Throw exception
                 throw new IllegalArgumentException(
-                        String.format("ERROR  | Config `%s` is invalid, please verify its contents", path));
+                        String.format("ERROR  | config `%s` is invalid, please verify its contents", path));
             }
 
             this.createComponents(lines.toArray(new String[lines.size()]));
         } catch (IOException exception) {
-            System.out.println("FATAL | Cannot recover from `IOException`");
+            System.out.println("FATAL | cannot recover from `IOException`");
             System.out.print(exception.getMessage());
         }
     }
@@ -156,7 +155,7 @@ public class ProjectManager {
 
                 // Abort if no parent was found
                 if (parent == null) {
-                    System.out.println(String.format("WARN | Could not find any component containing `%s`", name));
+                    System.out.println(String.format("WARN | could not find any component containing `%s`", name));
                     return;
                 }
 
@@ -171,15 +170,11 @@ public class ProjectManager {
 
                 // Remove the component at the previously identified index
                 parent.components[index] = null;
-
-                System.out.println(parent);
             }
         }
 
-        System.out.println(this);
-
         float total = this.projects.get(0).berechneKosten();
-        System.out.println(String.format("INFO   | Total: %s €", total));
+        System.out.println(String.format("INFO   | total: %s €", total));
     }
 
     public ProjectComponent findComponent(ProjectComponent[] source, String name) {
@@ -197,8 +192,6 @@ public class ProjectManager {
 
             target = this.findComponent(component.components, name);
         }
-
-        System.out.println(String.format("ERROR  | Cannot find parent project with name `%s`", name));
 
         return target;
     }
@@ -223,9 +216,6 @@ public class ProjectManager {
             }
 
         }
-
-        System.out
-                .println(String.format("ERROR  | Could not find any parent containing `%s`", name));
 
         return target;
     }

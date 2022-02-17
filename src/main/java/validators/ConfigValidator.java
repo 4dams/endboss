@@ -13,7 +13,7 @@ public class ConfigValidator {
     }
 
     public static boolean isValidLine(String line) {
-        System.out.println(String.format("DEBUG  | %s", line));
+        // System.out.println(String.format("DEBUG | %s", line));
 
         String trimmed = line.trim();
         String[] parts = trimmed.split("; ");
