@@ -1,7 +1,5 @@
 package validators;
 
-import java.util.Arrays;
-
 public class ConfigValidator {
     public static boolean isValid(String[] lines) {
         for (String line : lines) {
