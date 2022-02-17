@@ -57,8 +57,8 @@ public class ProjectManager {
             // Create array with all lines of the config
             String line = null;
             List<String> lines = new ArrayList<String>();
-            
-                            //Wieso funktioniert das?
+
+            // Wieso funktioniert das?
             while ((line = bufferedReader.readLine()) != null) {
                 lines.add(line);
             }
@@ -152,11 +152,10 @@ public class ProjectManager {
                         Project project = new Project(parts[1], parts[2],
                                 Float.parseFloat(parts[3].replace(";", "")));
 
-                                //Wieso das?
-                        //rawComponents = Arrays.copyOf(rawComponents, rawComponents.length + 1);
-                        //rawComponents[rawComponents.length - 1] = project;
+                        rawComponents = Arrays.copyOf(rawComponents, rawComponents.length + 1);
+                        rawComponents[rawComponents.length - 1] = project;
+
                         break;
-                    //
                 }
             }
         }
