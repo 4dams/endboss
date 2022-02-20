@@ -1,16 +1,38 @@
 import java.util.Arrays;
 
+/**
+ * @author Juri Adams (@4dams)
+ * @author Felix Rein
+ * 
+ * @version 1.0.0-Snapshot
+ * 
+ * Class Project
+ * Creates Project Objects
+ * extends ProjectComponents
+ * 
+ */
 public class Project extends ProjectComponent {
-
+/**
+ * Method setHourlyRate()
+ * Sets the hourlyRate of Project
+ * 
+ */
     @Override
     public void setHourlyRate(float hourlyRate) {
         this.hourlyRate = hourlyRate;
     }
-
+/**
+ * Method getHourlyRate()
+ * Returns the HourlyRate.
+ */
     @Override
     public float getHourlyRate() {
         return this.hourlyRate;
     }
+/**
+ * Method addComponent()
+ * Adds a component to the components Array.
+ */
 
     @Override
     public ProjectComponent[] addComponent(ProjectComponent component) {
@@ -19,7 +41,16 @@ public class Project extends ProjectComponent {
 
         return this.components;
     }
-
+/**
+ * Constructor Project
+ * Creates a Project Object.
+ * @param name
+ * Name of the Project
+ * @param description
+ * Description of the Project
+ * @param hourRate
+ * Hour Rate of the Project
+ */
     public Project(String name, String description, float hourRate) {
         this.setName(name);
         this.setDescription(description);
@@ -56,6 +87,10 @@ public class Project extends ProjectComponent {
         System.out.println(String.format("INFO   | total for project %s: %s", this.getName(), total));
 
         return total;
+    }
+
+    public String toString(){
+        return "Project" + this.name + ", " + "Stundensatz: " + this.hourlyRate;
     }
 
 }

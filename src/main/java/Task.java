@@ -17,5 +17,7 @@ public class Task extends ProjectComponent {
         this.setDescription(description);
         this.setBilledHours(billedHours);
     }
-
+    public String toString(){
+        return "Aufgabe" + this.name + ", " + this.billedHours + "h"; 
+    }
 }

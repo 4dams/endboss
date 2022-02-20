@@ -1,5 +1,15 @@
 import exceptions.NotImplementedException;
 
+/**
+ * @author Juri Adams (@4dams)
+ * @author Felix Rein
+ * 
+ * @version 1.0.0-Snapshot
+ * 
+ * Abstract Class ProjektComponent
+ * 
+ */
+
 public abstract class ProjectComponent {
     /**
      * Name of the Component
@@ -147,6 +157,10 @@ public abstract class ProjectComponent {
      * @return float representing the cost of this Component and its Subcomponents
      */
     public float berechneKosten() {
+        throw new NotImplementedException("method not implemented");
+    };
+
+    public String toString() {
         throw new NotImplementedException("method not implemented");
     };
 }

@@ -19,4 +19,7 @@ public Product(String name, String description, float productionCost) {
         this.setProductionCost(productionCost);    
 }
 
+public String toString(){
+    return "Product" + this.name + ", " + "Produktionskosten: " + this.productionCost;
+}
 }

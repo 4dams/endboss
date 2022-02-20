@@ -13,6 +13,9 @@ import validators.ConfigValidator;
  * @author Felix Rein
  * 
  * @version 1.0.0-Snapshot
+ * 
+ * Class ProjectManager
+ * 
  */
 public class ProjectManager {
 
@@ -20,6 +23,7 @@ public class ProjectManager {
 
     private List<ProjectComponent> projects = new ArrayList<ProjectComponent>();
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public static void main(String[] args) {
 
         // Iterate through provided config files
@@ -30,7 +34,7 @@ public class ProjectManager {
             ProjectManager projectManager = new ProjectManager(fileName);
         }
     }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public ProjectManager(String fileName) {
         System.out.println("INFO   | initializing new project manager");
 
@@ -57,7 +61,7 @@ public class ProjectManager {
             String line = null;
             List<String> lines = new ArrayList<String>();
 
-            // Wieso funktioniert das?
+
             while ((line = bufferedReader.readLine()) != null) {
                 lines.add(line);
             }
@@ -79,7 +83,7 @@ public class ProjectManager {
             System.out.print(exception.getMessage());
         }
     }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public void createComponents(String[] lines) {
         // Create all required components
         ProjectComponent[] tempComponents = {};
@@ -137,11 +141,17 @@ public class ProjectManager {
                     parent.components = Arrays.copyOf(parent.components, parent.components.length + 1);
                     parent.components[parent.components.length - 1] = target;
 
+
                 } catch (ArrayIndexOutOfBoundsException exception) {
                     this.projects.add(target);
                 }
             }
         }
+        // Printing components
+        for (String config : lines) {
+
+        }
+        
 
         // Delete items
         for (String config : lines) {
@@ -170,13 +180,57 @@ public class ProjectManager {
 
                 // Remove the component at the previously identified index
                 parent.components[index] = null;
+
+
             }
         }
+        //Print Components
+        //for (String config : lines) {
+        //String trimmed = config.trim();
+        //String[] parts = trimmed.split("; ");
+        //try {
+        //String name;
+        ////TODO: DEBUG ARRAYOUTOFBOUNDSEXCEPTION
+        ////try catch?
+        //if ((name = parts[4]) != null) {
+        //ProjectComponent lineToPrint = this
+        //.findComponent(this.projects.toArray(new ProjectComponent[this.projects.size()]), name); 
+        //if (trimmed.startsWith("+") && lineToPrint != null) {
+        //if (lineToPrint.components[4] != null) {
+        //lineToPrint.toString();
+        //}
+        //}  
+        //} 
+        //}
+        //catch (ArrayIndexOutOfBoundsException exception) {
+        //this.projects.add(null);
+        //}
+        //    
+        //
+        //       
+        //           
+        //}
+        //}
 
         float total = this.projects.get(0).berechneKosten();
         System.out.println(String.format("INFO   | total: %s €", total));
-    }
+    
 
+    public void printComponents(ProjectComponent[] source) {
+        
+    }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+ * Method findComponent()
+ * Searchs for component in Component Array
+ * @param source
+ * Source Array
+ * @param name
+ * Searched Element
+ * @return
+ * If Component in Array: Returns Element
+ * If Component not in Array: Returns null
+ */
     public ProjectComponent findComponent(ProjectComponent[] source, String name) {
         ProjectComponent target = null;
 
@@ -195,7 +249,18 @@ public class ProjectManager {
 
         return target;
     }
-
+/**
+ * Method findComponentParent
+ * Searchs for the Parent of a Component
+ * 
+ * @param source
+ * Source Array
+ * @param name
+ * Searched Element
+ * @return
+ * If Component has Child: Returns Child Component
+ * If Component has no Child: Returns null
+ */
     public ProjectComponent findComponentParent(ProjectComponent[] source, String name) {
         ProjectComponent target = null;
 
@@ -218,6 +283,10 @@ public class ProjectManager {
         }
 
         return target;
+    }
+
+    public void writeInFile(String line) {
+        System.out.println("not set");
     }
 
 }
