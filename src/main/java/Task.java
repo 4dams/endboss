@@ -12,12 +12,13 @@ public class Task extends ProjectComponent {
         return this.billedHours;
     }
 
-    public Task (String name, String description, int billedHours) {
+    public Task(String name, String description, int billedHours) {
         this.setName(name);
         this.setDescription(description);
         this.setBilledHours(billedHours);
     }
-    public String toString(){
-        return "Aufgabe" + this.name + ", " + this.billedHours + "h"; 
+
+    public String toString() {
+        return String.format("TASK     %s, Arbeitsaufwand: %sh", this.getName(), this.getBilledHours());
     }
 }

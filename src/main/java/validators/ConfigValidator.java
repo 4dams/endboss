@@ -1,5 +1,7 @@
 package validators;
 
+import helpers.Logger;
+
 public class ConfigValidator {
     public static boolean isValid(String[] lines) {
         for (String line : lines) {
@@ -11,12 +13,10 @@ public class ConfigValidator {
     }
 
     public static boolean isValidLine(String line) {
-        // System.out.println(String.format("DEBUG | %s", line));
+        Logger.debug(line);
 
         String trimmed = line.trim();
         String[] parts = trimmed.split("; ");
-
-        // System.out.println(String.format("DEBUG | %s", Arrays.toString(parts)));
 
         // Return `true` for comments
         if (trimmed.startsWith("//") || trimmed.startsWith("#"))
@@ -31,17 +31,14 @@ public class ConfigValidator {
         String addOrRemove = commandParts[0];
         String type = commandParts[1];
 
-        // System.out.println(String.format("DEBUG | addOrRemove: `%s` type: `%s`",
-        // addOrRemove, type));
-
         // Check if the line starts with a `+` or a `-`
         if (!trimmed.startsWith("+") && !trimmed.startsWith("-")) {
-            System.out.println("ERROR  | Each line must either start with a `+` or a `-`");
+            Logger.error("each line must start with either `+` or `-`");
             return false;
         }
 
         if (addOrRemove.equals("+") && (!type.equals("PROJ") && !type.equals("AUF") && !type.equals("PROD"))) {
-            System.out.println("ERROR  | The second parameter must be one of [\"PROJ\", \"AUF\", \"PROD\"]");
+            Logger.error("the second parameter must be one of [\"PROJ\", \"AUF\", \"PROD\"]");
             return false;
         }
 

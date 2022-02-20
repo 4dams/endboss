@@ -13,13 +13,13 @@ public class Product extends ProjectComponent {
         return this.productionCost;
     }
 
-public Product(String name, String description, float productionCost) {  
+    public Product(String name, String description, float productionCost) {
         this.setName(name);
         this.setDescription(description);
-        this.setProductionCost(productionCost);    
-}
+        this.setProductionCost(productionCost);
+    }
 
-public String toString(){
-    return "Product" + this.name + ", " + "Produktionskosten: " + this.productionCost;
-}
+    public String toString() {
+        return String.format("PRODUCT  %s, Produktionskosten: %s €", this.getName(), this.getProductionCost());
+    }
 }

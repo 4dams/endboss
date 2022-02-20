@@ -1,11 +1,16 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import helpers.Logger;
+import helpers.Whitespace;
 import validators.ConfigValidator;
 
 /**
@@ -14,53 +19,67 @@ import validators.ConfigValidator;
  * 
  * @version 1.0.0-Snapshot
  * 
- * Class ProjectManager
+ *          Class ProjectManager
  * 
  */
 public class ProjectManager {
 
-    private File file;
+    private File configFile;
+    private File logFile;
+
+    private Writer logFileWriter;
 
     private List<ProjectComponent> projects = new ArrayList<ProjectComponent>();
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public static void main(String[] args) {
-
-        // Iterate through provided config files
-        for (String fileName : args) {
-            System.out.println(String.format("INFO   | looking up config `%s`...", fileName));
-
-            // Create new ProjectManager instance for each file
-            ProjectManager projectManager = new ProjectManager(fileName);
+        if (args.length < 1) {
+            Logger.error("no config file provided");
+            System.exit(1);
         }
-    }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public ProjectManager(String fileName) {
-        System.out.println("INFO   | initializing new project manager");
 
-        // Create new File object
-        file = new File(fileName);
-        String path = file.getAbsolutePath();
+        Logger.debug("provided config file: " + args[0]);
+
+        if (args.length == 2) {
+            Logger.debug("provided log file: " + args[1]);
+        }
+
+        ProjectManager projectManager = new ProjectManager(args[0], args[1]);
+    }
+
+    public ProjectManager(String configFilePath, String logFilePath) {
+        Logger.info("creating new project manager");
+
+        // Create new config file object
+        configFile = new File(configFilePath);
+        String path = configFile.getAbsolutePath();
+
+        // Create new log file writer
+        try {
+            logFile = new File(logFilePath);
+            logFileWriter = new BufferedWriter(new FileWriter(logFile, true));
+
+        } catch (IOException e) {
+            Logger.error("error creating log file");
+        }
 
         // Check if a file with the provided fileName exists
-        if (!file.exists() || !file.canRead() || !file.isFile())
+        if (!configFile.exists() || !configFile.canRead() || !configFile.isFile())
             throw new IllegalArgumentException(
                     String.format("ERROR  | provided path `%s` is not readable or does not exists",
                             path));
 
         // Check if the file is a directory
-        if (file.isDirectory())
+        if (configFile.isDirectory())
             throw new IllegalArgumentException(
                     String.format("ERROR  | provided path `%s` is a directory", path));
 
-        System.out.println(String.format("INFO   | reading contents of file `%s`", path));
+        Logger.info(String.format("reading contents of file `%s`", path));
 
         // Read file contents
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(configFile))) {
             // Create array with all lines of the config
             String line = null;
             List<String> lines = new ArrayList<String>();
-
 
             while ((line = bufferedReader.readLine()) != null) {
                 lines.add(line);
@@ -68,9 +87,9 @@ public class ProjectManager {
 
             // Check if the config is valid
             if (ConfigValidator.isValid(lines.toArray(new String[lines.size()]))) {
-                System.out.println(String.format("INFO   | config `%s` is valid", path));
+                Logger.success("provided config is valid");
             } else {
-                System.out.println(String.format("INFO   | config `%s` is invalid", path));
+                Logger.error("prodivded config is invalid");
 
                 // Throw exception
                 throw new IllegalArgumentException(
@@ -78,12 +97,19 @@ public class ProjectManager {
             }
 
             this.createComponents(lines.toArray(new String[lines.size()]));
+
+            this.printProjects();
+
+            if (this.logFileWriter != null) {
+                this.logFileWriter.close();
+            }
         } catch (IOException exception) {
-            System.out.println("FATAL | cannot recover from `IOException`");
-            System.out.print(exception.getMessage());
+            Logger.error("error reading from config file");
+            Logger.error(exception.getMessage());
         }
+
     }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     public void createComponents(String[] lines) {
         // Create all required components
         ProjectComponent[] tempComponents = {};
@@ -141,17 +167,11 @@ public class ProjectManager {
                     parent.components = Arrays.copyOf(parent.components, parent.components.length + 1);
                     parent.components[parent.components.length - 1] = target;
 
-
                 } catch (ArrayIndexOutOfBoundsException exception) {
                     this.projects.add(target);
                 }
             }
         }
-        // Printing components
-        for (String config : lines) {
-
-        }
-        
 
         // Delete items
         for (String config : lines) {
@@ -165,7 +185,7 @@ public class ProjectManager {
 
                 // Abort if no parent was found
                 if (parent == null) {
-                    System.out.println(String.format("WARN | could not find any component containing `%s`", name));
+                    Logger.error(String.format("could not find component containing %s", name));
                     return;
                 }
 
@@ -181,56 +201,19 @@ public class ProjectManager {
                 // Remove the component at the previously identified index
                 parent.components[index] = null;
 
-
             }
         }
-        //Print Components
-        //for (String config : lines) {
-        //String trimmed = config.trim();
-        //String[] parts = trimmed.split("; ");
-        //try {
-        //String name;
-        ////TODO: DEBUG ARRAYOUTOFBOUNDSEXCEPTION
-        ////try catch?
-        //if ((name = parts[4]) != null) {
-        //ProjectComponent lineToPrint = this
-        //.findComponent(this.projects.toArray(new ProjectComponent[this.projects.size()]), name); 
-        //if (trimmed.startsWith("+") && lineToPrint != null) {
-        //if (lineToPrint.components[4] != null) {
-        //lineToPrint.toString();
-        //}
-        //}  
-        //} 
-        //}
-        //catch (ArrayIndexOutOfBoundsException exception) {
-        //this.projects.add(null);
-        //}
-        //    
-        //
-        //       
-        //           
-        //}
-        //}
+    };
 
-        float total = this.projects.get(0).berechneKosten();
-        System.out.println(String.format("INFO   | total: %s €", total));
-    
-
-    public void printComponents(ProjectComponent[] source) {
-        
-    }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/**
- * Method findComponent()
- * Searchs for component in Component Array
- * @param source
- * Source Array
- * @param name
- * Searched Element
- * @return
- * If Component in Array: Returns Element
- * If Component not in Array: Returns null
- */
+    /**
+     * Method findComponent()
+     * Searchs for component in Component Array
+     * 
+     * @param source Source Array
+     * @param name   Searched Element
+     * @return If Component in Array: Returns Element
+     *         If Component not in Array: Returns null
+     */
     public ProjectComponent findComponent(ProjectComponent[] source, String name) {
         ProjectComponent target = null;
 
@@ -249,18 +232,16 @@ public class ProjectManager {
 
         return target;
     }
-/**
- * Method findComponentParent
- * Searchs for the Parent of a Component
- * 
- * @param source
- * Source Array
- * @param name
- * Searched Element
- * @return
- * If Component has Child: Returns Child Component
- * If Component has no Child: Returns null
- */
+
+    /**
+     * Method findComponentParent
+     * Searchs for the Parent of a Component
+     * 
+     * @param source Source Array
+     * @param name   Searched Element
+     * @return If Component has Child: Returns Child Component
+     *         If Component has no Child: Returns null
+     */
     public ProjectComponent findComponentParent(ProjectComponent[] source, String name) {
         ProjectComponent target = null;
 
@@ -283,6 +264,40 @@ public class ProjectManager {
         }
 
         return target;
+    }
+
+    public void printRecursively(ProjectComponent[] source, int iteration) {
+        try {
+            // Iterate through project tree
+            for (ProjectComponent component : source) {
+                if (component == null)
+                    return;
+
+                // Print tree to console
+                Logger.info(String.format("%s└ %s", Whitespace.generate(iteration * 4), component.toString()));
+
+                // Write tree to file
+                if (this.logFileWriter != null) {
+                    this.logFileWriter
+                            .append(String.format("%s└ %s\n", Whitespace.generate(iteration * 4),
+                                    component.toString()));
+
+                }
+
+                if (component.hasChildren()) {
+                    this.printRecursively(component.components, iteration + 1);
+                }
+            }
+
+        } catch (IOException e) {
+            Logger.error(String.format("error writing to log file at `%s`", this.logFile.getAbsolutePath()));
+            e.printStackTrace();
+        }
+
+    }
+
+    public void printProjects() {
+        this.printRecursively(this.projects.toArray(new ProjectComponent[this.projects.size()]), 0);
     }
 
     public void writeInFile(String line) {

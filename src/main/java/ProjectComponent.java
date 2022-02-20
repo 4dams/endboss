@@ -6,7 +6,7 @@ import exceptions.NotImplementedException;
  * 
  * @version 1.0.0-Snapshot
  * 
- * Abstract Class ProjektComponent
+ *          Abstract Class ProjektComponent
  * 
  */
 
@@ -163,4 +163,8 @@ public abstract class ProjectComponent {
     public String toString() {
         throw new NotImplementedException("method not implemented");
     };
+
+    public boolean hasChildren() {
+        return false;
+    }
 }
