@@ -1,14 +1,11 @@
 package helpers;
 
 /**
-* @author Juri Adams (@4dams)
-* @author Felix Rein
-* 
-* @version 1.0.0-Snapshot
-* 
-*          Class Logger
-* 
-*/
+ * @author Juri Adams (@4dams)
+ * @author Felix Rein
+ * 
+ * @version 1.0.0-Snapshot
+ */
 public class Logger {
     public static void println(String type, String message) {
         System.out.println(String.format("%-10s | %s", type, message));

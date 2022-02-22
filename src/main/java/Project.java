@@ -5,36 +5,17 @@ import java.util.Arrays;
  * @author Felix Rein
  * 
  * @version 1.0.0-Snapshot
- * 
- *          Class Project
- *          Creates Project Objects
- *          extends ProjectComponents
- * 
  */
 public class Project extends ProjectComponent {
-    /**
-     * Method setHourlyRate()
-     * Sets the hourlyRate of Project
-     * 
-     */
     @Override
     public void setHourlyRate(float hourlyRate) {
         this.hourlyRate = hourlyRate;
     }
 
-    /**
-     * Method getHourlyRate()
-     * Returns the HourlyRate.
-     */
     @Override
     public float getHourlyRate() {
         return this.hourlyRate;
     }
-
-    /**
-     * Method addComponent()
-     * Adds a component to the components Array.
-     */
 
     @Override
     public ProjectComponent[] addComponent(ProjectComponent component) {
@@ -45,15 +26,11 @@ public class Project extends ProjectComponent {
     }
 
     /**
-     * Constructor Project
-     * Creates a Project Object.
+     * Create a new Project
      * 
-     * @param name
-     *                    Name of the Project
-     * @param description
-     *                    Description of the Project
-     * @param hourRate
-     *                    Hour Rate of the Project
+     * @param name        Name of the Project
+     * @param description Description of the Project
+     * @param hourRate    Hour Rate of the Project
      */
     public Project(String name, String description, float hourRate) {
         this.setName(name);
@@ -61,9 +38,6 @@ public class Project extends ProjectComponent {
         this.setHourlyRate(hourRate);
     }
 
-    /**
-     * Calculate the cost of this Project
-     */
     @Override
     public float berechneKosten() {
         float total = 0;
@@ -85,11 +59,6 @@ public class Project extends ProjectComponent {
         return total;
     }
 
-    public String toString() {
-        return String.format("PROJECT  %s, Stundensatz: %s €, Gesamtkosten: %s", this.getName(), this.getHourlyRate(),
-                this.berechneKosten());
-    }
-
     @Override
     public boolean hasChildren() {
         if (this.components != null && this.components.length > 0) {
@@ -97,5 +66,10 @@ public class Project extends ProjectComponent {
         }
 
         return false;
+    }
+
+    public String toString() {
+        return String.format("PROJECT  %s, Stundensatz: %s €, Gesamtkosten: %s", this.getName(), this.getHourlyRate(),
+                this.berechneKosten());
     }
 }

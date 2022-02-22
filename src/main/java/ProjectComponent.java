@@ -45,6 +45,12 @@ public abstract class ProjectComponent {
      */
     public ProjectComponent[] components = {};
 
+    /**
+     * Add a component as a child component
+     * 
+     * @param component Component to add as a child
+     * @return Array of project components
+     */
     public ProjectComponent[] addComponent(ProjectComponent component) {
         throw new NotImplementedException("method not implemented");
     };
@@ -67,9 +73,6 @@ public abstract class ProjectComponent {
      * @param description String containing the description of the Component
      */
     public void setDescription(String description) {
-        // if (description.trim().isEmpty())
-        // throw new IllegalArgumentException("`description` must not be empty");
-
         this.description = description;
     };
 
@@ -164,6 +167,12 @@ public abstract class ProjectComponent {
         throw new NotImplementedException("method not implemented");
     };
 
+    /**
+     * Check if a component has children
+     * 
+     * @return boolean indicating if the component has children
+     *         defaults to `false` if method is not implemented
+     */
     public boolean hasChildren() {
         return false;
     }

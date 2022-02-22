@@ -3,9 +3,6 @@
  * @author Felix Rein
  * 
  * @version 1.0.0-Snapshot
- * 
- *          Class NotImplementedException
- * 
  */
 
 package exceptions;

@@ -18,9 +18,7 @@ import validators.ConfigValidator;
  * @author Felix Rein
  * 
  * @version 1.0.0-Snapshot
- * 
  *          Class ProjectManager
- * 
  */
 public class ProjectManager {
 
@@ -55,7 +53,7 @@ public class ProjectManager {
      * Constructor ProjectManager
      * 
      * @param configFilePath Path for config file
-     * @param logFilePath Path for log file
+     * @param logFilePath    Path for log file
      */
     public ProjectManager(String configFilePath, String logFilePath) {
         Logger.info("creating new project manager");
@@ -120,6 +118,7 @@ public class ProjectManager {
         }
 
     }
+
     /**
      * Method createComponents()
      * Creates a Componenet in an Array from config file
@@ -281,11 +280,12 @@ public class ProjectManager {
 
         return target;
     }
+
     /**
      * Method printRecursively()
      * Prints the ProjectTree in Consol and writes it in log file
-     * @param source    Source Array
      * 
+     * @param source Source Array
      */
     public void printRecursively(ProjectComponent[] source, int iteration) {
         try {
@@ -317,6 +317,9 @@ public class ProjectManager {
 
     }
 
+    /**
+     * Recursively print all components and their children
+     */
     public void printProjects() {
         this.printRecursively(this.projects.toArray(new ProjectComponent[this.projects.size()]), 0);
     }
