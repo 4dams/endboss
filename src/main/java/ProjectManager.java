@@ -34,6 +34,14 @@ public class ProjectManager {
      * @param args provided config.txt and log.txt
      */
     public static void main(String[] args) {
+        if (args.length == 0) {
+            Logger.info("Welcome to `ProjectManager` – CLI usage");
+            Logger.info("ProjectManager <config> <log>");
+            Logger.info("    config  (required): path to the config file to read");
+            Logger.info("    log     (optional): path to the log file to write the results to");
+            System.exit(1);
+        }
+
         if (args.length < 1) {
             Logger.error("no config file provided");
             System.exit(1);
@@ -306,9 +314,7 @@ public class ProjectManager {
                         this.printRecursively(component.components, iteration + 1);
                     }
                 }
-
             }
-
         } catch (IOException e) {
             Logger.error(String.format("error writing to log file at `%s`", this.logFile.getAbsolutePath()));
             e.printStackTrace();
