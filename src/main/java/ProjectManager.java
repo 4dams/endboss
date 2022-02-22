@@ -18,7 +18,6 @@ import validators.ConfigValidator;
  * @author Felix Rein
  * 
  * @version 1.0.0-Snapshot
- *          Class ProjectManager
  */
 public class ProjectManager {
 
