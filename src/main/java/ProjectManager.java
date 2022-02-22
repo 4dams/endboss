@@ -290,23 +290,23 @@ public class ProjectManager {
         try {
             // Iterate through project tree
             for (ProjectComponent component : source) {
-                if (component == null)
-                    return;
+                if (component != null) {
+                    // Print tree to console
+                    Logger.info(String.format("%s└ %s", Whitespace.generate(iteration * 4), component.toString()));
 
-                // Print tree to console
-                Logger.info(String.format("%s└ %s", Whitespace.generate(iteration * 4), component.toString()));
+                    // Write tree to file
+                    if (this.logFileWriter != null) {
+                        this.logFileWriter
+                                .append(String.format("%s└ %s\n", Whitespace.generate(iteration * 4),
+                                        component.toString()));
 
-                // Write tree to file
-                if (this.logFileWriter != null) {
-                    this.logFileWriter
-                            .append(String.format("%s└ %s\n", Whitespace.generate(iteration * 4),
-                                    component.toString()));
+                    }
 
+                    if (component.hasChildren()) {
+                        this.printRecursively(component.components, iteration + 1);
+                    }
                 }
 
-                if (component.hasChildren()) {
-                    this.printRecursively(component.components, iteration + 1);
-                }
             }
 
         } catch (IOException e) {
