@@ -31,6 +31,11 @@ public class ProjectManager {
 
     private List<ProjectComponent> projects = new ArrayList<ProjectComponent>();
 
+    /**
+     * Main Method
+     * 
+     * @param args provided config.txt and log.txt
+     */
     public static void main(String[] args) {
         if (args.length < 1) {
             Logger.error("no config file provided");
@@ -46,6 +51,12 @@ public class ProjectManager {
         ProjectManager projectManager = new ProjectManager(args[0], args[1]);
     }
 
+    /**
+     * Constructor ProjectManager
+     * 
+     * @param configFilePath Path for config file
+     * @param logFilePath Path for log file
+     */
     public ProjectManager(String configFilePath, String logFilePath) {
         Logger.info("creating new project manager");
 
@@ -109,7 +120,12 @@ public class ProjectManager {
         }
 
     }
-
+    /**
+     * Method createComponents()
+     * Creates a Componenet in an Array from config file
+     * 
+     * @param lines Array with data from config file
+     */
     public void createComponents(String[] lines) {
         // Create all required components
         ProjectComponent[] tempComponents = {};
@@ -265,7 +281,12 @@ public class ProjectManager {
 
         return target;
     }
-
+    /**
+     * Method printRecursively()
+     * Prints the ProjectTree in Consol and writes it in log file
+     * @param source    Source Array
+     * 
+     */
     public void printRecursively(ProjectComponent[] source, int iteration) {
         try {
             // Iterate through project tree
@@ -299,9 +320,4 @@ public class ProjectManager {
     public void printProjects() {
         this.printRecursively(this.projects.toArray(new ProjectComponent[this.projects.size()]), 0);
     }
-
-    public void writeInFile(String line) {
-        System.out.println("not set");
-    }
-
 }

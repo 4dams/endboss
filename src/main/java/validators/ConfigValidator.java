@@ -1,8 +1,23 @@
 package validators;
 
 import helpers.Logger;
-
+/**
+ * @author Juri Adams (@4dams)
+ * @author Felix Rein
+ * 
+ * @version 1.0.0-Snapshot
+ * 
+ *          Class ConfigValidator
+ * 
+ */
 public class ConfigValidator {
+/**
+ * Method isValid()
+ * Tests if Array is valid
+ * 
+ * @param lines Array that should be tested
+ * @return
+ */
     public static boolean isValid(String[] lines) {
         for (String line : lines) {
             if (!ConfigValidator.isValidLine(line))
@@ -11,7 +26,13 @@ public class ConfigValidator {
 
         return true;
     }
-
+/**
+ * Method isValidLine()
+ * Tests if a Line is valid
+ * 
+ * @param line Line that should be tested
+ * @return  returns true if line valid
+ */
     public static boolean isValidLine(String line) {
         Logger.debug(line);
 

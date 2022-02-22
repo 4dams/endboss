@@ -1,3 +1,13 @@
+/**
+ * @author Juri Adams (@4dams)
+ * @author Felix Rein
+ * 
+ * @version 1.0.0-Snapshot
+ * 
+ *          Class Task
+ *          extends ProjectComponent
+ * 
+ */
 public class Task extends ProjectComponent {
     @Override
     public void setBilledHours(int billedHours) {
@@ -11,6 +21,14 @@ public class Task extends ProjectComponent {
     public int getBilledHours() {
         return this.billedHours;
     }
+/**
+ * Constructor for Task Object
+ * 
+ * @param name name
+ * @param description description
+ * @param billedHours Money per hour
+ * 
+ */
 
     public Task(String name, String description, int billedHours) {
         this.setName(name);
